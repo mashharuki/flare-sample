@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This repository (`flare-sample`) is a Flare Network verification/tutorial workspace. Currently contains one sub-project:
+This repository (`flare-sample`) is a Flare Network verification/tutorial workspace. Currently contains these sub-projects:
 
 - **`hardhat-sample/`** — Hardhat 3 + Viem + TypeScript + Bun smart contract project targeting Flare Network
+- **`fxrp-sample/`** — FAssets (FXRP) integration scripts using Viem + Biome
+- **`aa-wallet-sample/`** — Flare Smart Accounts (Account Abstraction) starter project using Viem + XRPL + Biome
 
 ## hardhat-sample
 
@@ -107,3 +109,56 @@ TypeScript tests using Viem + Node's built-in `node:test` runner. Run via `bun r
 
 Testnet faucet: https://faucet.flare.network/coston2  
 Block explorer: https://coston2-explorer.flare.network
+
+## aa-wallet-sample
+
+Flare Smart Accounts starter project. XRPL users can interact with the Flare chain without holding any FLR.
+
+### Setup
+
+```bash
+cd aa-wallet-sample
+bun install
+cp .env.example .env  # set XRPL_SEED and optionally PRIVATE_KEY
+```
+
+Requires Bun v1.0+. `XRPL_SEED` must be set for scripts 01/02/04. `PRIVATE_KEY` is needed for script 05.
+
+### Common Commands
+
+```bash
+# Step 1: Get your Flare smart account address from XRPL address
+bun run 01:get-smart-account
+
+# Step 2: Check FLR/FXRP balances of the smart account
+bun run 02:check-balances
+
+# Step 3: See payment reference encoding examples (no network needed)
+bun run 03:encode-instructions
+
+# Step 4: Send FXRP transfer instruction via XRPL Payment
+bun run 04:send-fxrp-transfer
+
+# Step 5: Register and encode a custom instruction
+bun run 05:custom-instruction
+
+# Format code
+bun run format
+```
+
+### Architecture
+
+- `src/client.ts` — Viem public/wallet client for Coston2
+- `src/constants.ts` — ABIs, contract addresses, `getMasterAccountControllerAddress()`
+- `src/helpers/paymentRef.ts` — 32-byte payment reference encode/decode
+- `src/scripts/` — Step-by-step learning scripts
+
+### Key Contracts
+
+| Contract | Address | Network |
+|---|---|---|
+| FlareContractsRegistry | `0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019` | All Flare networks |
+| MasterAccountController | `0x434936d47503353f06750Db1A444DBDC5F0AD37c` | All Flare networks |
+
+XRPL Testnet faucet: https://xrpl.org/resources/dev-tools/xrp-faucets  
+Flare Smart Accounts docs: https://dev.flare.network/smart-accounts/

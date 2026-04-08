@@ -1,0 +1,25 @@
+{
+	"name": "aa-wallet-sample",
+	"version": "1.0.0",
+	"description": "Flare Smart Accounts (Account Abstraction) — 初心者向けスタータープロジェクト",
+	"type": "module",
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"format:check": "bunx biome format .",
+		"01:get-smart-account": "bun run src/scripts/01-get-smart-account.ts",
+		"02:check-balances": "bun run src/scripts/02-check-balances.ts",
+		"03:encode-instructions": "bun run src/scripts/03-encode-instructions.ts",
+		"04:send-fxrp-transfer": "bun run src/scripts/04-send-fxrp-transfer.ts",
+		"05:custom-instruction": "bun run src/scripts/05-custom-instruction.ts"
+	},
+	"dependencies": {
+		"dotenv": "^16.0.0",
+		"viem": "^2.43.0",
+		"xrpl": "^4.0.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.10",
+		"@types/node": "^22.0.0",
+		"typescript": "^5.0.0"
+	}
+}
