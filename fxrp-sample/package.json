@@ -1,0 +1,22 @@
+{
+	"name": "fxrp-sample",
+	"version": "1.0.0",
+	"description": "FXRP / FAssets on Flare Network — 学習用スタータープロジェクト",
+	"type": "module",
+	"scripts": {
+		"format": "bunx biome format --write .",
+		"01:get-fxrp-address": "bun run src/scripts/01-get-fxrp-address.ts",
+		"02:get-fassets-settings": "bun run src/scripts/02-get-fassets-settings.ts",
+		"03:list-agents": "bun run src/scripts/03-list-agents.ts",
+		"04:reserve-collateral": "bun run src/scripts/04-reserve-collateral.ts"
+	},
+	"dependencies": {
+		"dotenv": "^16.0.0",
+		"viem": "^2.43.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.10",
+		"@types/node": "^22.0.0",
+		"typescript": "^5.0.0"
+	}
+}

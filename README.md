@@ -7,3 +7,4 @@ Flare Network検証用のリポジトリです。
 - [テストネット faucetサイト](https://faucet.flare.network/coston2)
 - [開発者向けドキュメント](https://dev.flare.network/)
 - [GitHub](https://github.com/flare-foundation)
+- [About FXRP](https://dev.flare.network/fxrp/overview)
