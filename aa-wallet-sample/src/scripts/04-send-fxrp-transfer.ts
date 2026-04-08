@@ -7,8 +7,12 @@
  *
  * 【前提条件】
  *   .env ファイルに以下を設定すること:
- *   - XRPL_SEED          : XRPL テストネット用ウォレットシード
+ *   - XRPL_SEED          : XRPL テストネット用ウォレットシード (スクリプト 00 で生成)
  *   - RECIPIENT_ADDRESS  : 転送先 Flare アドレス
+ *
+ *   XRPL アカウントが有効化されていること。
+ *   未有効化の場合は先にフォーセットで XRP を取得してください:
+ *   https://xrpl.org/resources/dev-tools/xrp-faucets
  *
  *   スマートアカウントに FXRP が存在することが前提。
  *   FXRP のミントは smart-accounts-cli を使用してください:
@@ -125,9 +129,26 @@ async function main() {
 		console.log("  MemoData :", memoData);
 		console.log();
 
-		const result = await xrplClient.submitAndWait(payment, {
-			wallet: xrplWallet,
-		});
+		let result: Awaited<ReturnType<typeof xrplClient.submitAndWait>>;
+		try {
+			result = await xrplClient.submitAndWait(payment, {
+				wallet: xrplWallet,
+			});
+		} catch (err: unknown) {
+			const msg = err instanceof Error ? err.message : String(err);
+			if (msg.includes("Account not found")) {
+				console.error("❌ XRPL アカウントが有効化されていません。");
+				console.error("");
+				console.error("  XRP テストネット フォーセットでアカウントに XRP を送金してください:");
+				console.error("  https://xrpl.org/resources/dev-tools/xrp-faucets");
+				console.error(`  アドレス: ${xrplWallet.address}`);
+				console.error("");
+				console.error("  フォーセットで XRP を受け取ったら再度このスクリプトを実行してください。");
+			} else {
+				console.error("❌ トランザクション送信エラー:", msg);
+			}
+			process.exit(1);
+		}
 
 		const txHash = result.result.hash;
 		console.log("✅ トランザクション送信完了!");

@@ -248,7 +248,53 @@ bun run 02:check-balances
 bun run 04:send-fxrp-transfer
 ```
 
+実行結果例
+
+```bash
+=== Flare Smart Accounts: FXRP 転送命令の送信 ===
+
+XRPL ウォレット : r4U1RSo5v3PwRYcBZj2JKVjL8y2JDScW6C
+転送先 Flare    : 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+
+オペレーター XRPL : rEyj8nsHLdgt79KJWzXR5BgF7ZbaohbXwq
+
+エンコード済み命令:
+  ペイメントリファレンス : 0x01000000000000000000000a51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+  命令名               : FXRP 転送
+  転送量 (raw)         : 10
+  パラメータ (転送先)   : 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+
+XRPL テストネットに接続中...
+接続完了
+
+XRPL Payment トランザクションを送信中...
+  宛先     : rEyj8nsHLdgt79KJWzXR5BgF7ZbaohbXwq
+  金額     : 1 XRP
+  MemoData : 01000000000000000000000A51908F598A5E0D8F1A3BABFA6DF76F9704DAD072
+
+✅ トランザクション送信完了!
+  TX ハッシュ : 8E399245E0B083E172815557BFD552525AE5DE239062363E0EDD4ABBA24EDF56
+  エクスプローラー: https://testnet.xrpl.org/transactions/8E399245E0B083E172815557BFD552525AE5DE239062363E0EDD4ABBA24EDF56
+
+次のステップ: オペレーターが FDC 証明を取得して Flare 上で命令を実行します。
+Flare エクスプローラーでスマートアカウントへの FXRP 転送を確認できます:
+  https://coston2-explorer.flare.network
+```
+
 > **注意**: スクリプト 04 は実際の XRPL トランザクションを送信します。必ずテストネットで実行してください。
+
+#### `Account not found.` エラーが出た場合
+
+XRPL アカウントはまだ XRP を受け取ったことがない場合、ネットワーク上に存在しない状態です。  
+[XRP Faucets](https://xrpl.org/resources/dev-tools/xrp-faucets) でアドレスに XRP を送ってアカウントを有効化してから再実行してください。
+
+```
+❌ XRPL アカウントが有効化されていません。
+
+  XRP テストネット フォーセットでアカウントに XRP を送金してください:
+  https://xrpl.org/resources/dev-tools/xrp-faucets
+  アドレス: rXXXXXXXXXXXXXXXXXXXX
+```
 
 ### カスタム命令の登録
 
