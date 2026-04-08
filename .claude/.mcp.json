@@ -34,6 +34,7 @@
       ]
     },
     "flare-devhub": {
+      "type": "http",
       "url": "https://dev.flare.network/mcp"
     }
   }
