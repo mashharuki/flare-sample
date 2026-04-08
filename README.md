@@ -9,3 +9,4 @@ Flare Network検証用のリポジトリです。
 - [GitHub](https://github.com/flare-foundation)
 - [About FXRP](https://dev.flare.network/fxrp/overview)
 - [FlareNetwork エコシステム](https://flare.network/news/category/ecosystem)
+- [HyperliquidでXRP現物取引が解禁：Flare Networkの「FXRP」がもたらすDeFi革命](https://www.gfa.co.jp/crypto/news/alt-news/news-551/)
