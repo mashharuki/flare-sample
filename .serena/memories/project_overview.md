@@ -4,17 +4,13 @@
 Flare Network verification/tutorial workspace. Demonstrates smart contract development, deployment, and interaction on Flare Network testnets and mainnet.
 
 ## Sub-projects
-- `hardhat-sample/` — Main project: Hardhat 3 + Viem + TypeScript + Bun smart contract project
+- `hardhat-sample/` — Hardhat 3 + Viem + TypeScript + Bun smart contract project (Counter, SimpleStorage contracts)
+- `fxrp-sample/` — FXRP/FAssets learning project: read FAssets settings, list agents, reserve collateral for minting
 
-## Tech Stack
-- **Runtime**: Bun v1.0+ (package manager and test runner)
+## Tech Stack (共通)
+- **Runtime**: Bun v1.0+ (package manager)
 - **Language**: TypeScript (ESM, `"type": "module"`)
-- **Smart Contracts**: Solidity 0.8.28
-- **Framework**: Hardhat 3 with `defineConfig()` API
-- **Contract interaction**: Viem v2
-- **Deployment**: Hardhat Ignition
-- **Testing**: Node's built-in `node:test` (TypeScript) + forge-std (Solidity)
-- **Formatting**: Prettier + prettier-plugin-solidity
+- **Formatter**: Biome (`bunx biome format --write .`) in fxrp-sample; Prettier in hardhat-sample
 
 ## Networks Supported
 | Network | Chain ID | Purpose |
@@ -25,5 +21,6 @@ Flare Network verification/tutorial workspace. Demonstrates smart contract devel
 | Flare | 14 | Mainnet |
 
 ## Environment
-- Requires `PRIVATE_KEY` env var (set in `hardhat-sample/.env`)
+- Both sub-projects require a `.env` file copied from `.env.example`
+- `PRIVATE_KEY` is needed only for write operations (04-reserve-collateral.ts, deploy scripts)
 - Node.js v22+, Bun v1.0+

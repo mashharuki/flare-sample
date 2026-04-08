@@ -1,6 +1,6 @@
 # Architecture
 
-## Directory Structure (hardhat-sample/)
+## hardhat-sample/
 
 ```
 hardhat-sample/
@@ -28,20 +28,44 @@ hardhat-sample/
 └── package.json
 ```
 
-## Key Design Patterns
+## fxrp-sample/
 
-### Deployed Address Resolution
-`helpers/getDeployedAddress.ts` reads `ignition/deployments/chain-{chainId}/deployed_addresses.json`.
-Tasks call `getDeployedAddress("CounterModule#Counter", chainId)` — no manual address management needed.
+```
+fxrp-sample/
+├── src/
+│   ├── client.ts           # viem publicClient (Coston2, FLARE_RPC_URL override)
+│   ├── constants.ts        # FlareContractsRegistry addr, XRP_USD_FEED_ID, ABIs
+│   └── scripts/
+│       ├── 01-get-fxrp-address.ts      # Registry→AssetManagerFXRP→fAsset() + ERC20 info
+│       ├── 02-get-fassets-settings.ts  # CRF, XRP/USD price (FTSOv2), FXRP token info
+│       ├── 03-list-agents.ts           # getAvailableAgentsDetailedList() paged
+│       └── 04-reserve-collateral.ts   # reserveCollateral() with DRY_RUN guard
+├── .env.example
+├── package.json             # Biome formatter, viem, dotenv, @types/node, typescript
+├── tsconfig.json
+└── .gitignore               # excludes .env, node_modules, dist
+```
 
-### Task Pattern
-Each task:
-1. Calls `await hre.network.connect()` to get `{ viem }`
-2. Gets `chainId` from `publicClient.getChainId()`
-3. Resolves contract address via `getDeployedAddress()`
-4. Interacts via `viem.getContractAt()`
+## Key Design Patterns (fxrp-sample)
 
-### Hardhat 3 Config
-- `plugins: [hardhatToolboxViem]`
-- `tasks: [task1, task2, ...]` (built task objects)
-- Networks: `hardhat` (edr-simulated), `coston2/coston/songbird/flare` (http)
+### FlareContractsRegistry pattern
+All contract addresses resolved at runtime via `getContractAddressByName()` — never hardcoded.
+FlareContractsRegistry: `0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019` (same on all networks).
+
+### viem multi-return values
+viem returns multiple function outputs as an array, not an object:
+```typescript
+const [agents, totalLength] = await assetManager.read.getAvailableAgentsDetailedList([0n, 10n]);
+```
+
+### FTSOv2 price formula
+`price = rawValue / 10^feedDecimals` (divide, not multiply)
+Example: rawValue=1372668, decimals=6 → $1.3727
+
+### DRY_RUN guard (script 04)
+`DRY_RUN=true` by default. PRIVATE_KEY not required in DRY_RUN mode.
+Set `DRY_RUN=false` in .env to actually broadcast.
+
+### ABI limitation note
+The simplified ABIs in constants.ts may not match the full on-chain struct for complex returns
+(e.g. `getSettings()`, `getAgentInfo()`). For production use `@flarenetwork/flare-wagmi-periphery-package`.

@@ -1,26 +1,35 @@
 # Code Style & Conventions
 
-## TypeScript
-- ESM modules (`"type": "module"`) — always use `.js` extensions in imports (e.g., `../helpers/getDeployedAddress.js`)
-- JSDoc comments in Japanese for public functions (`@param`, `@returns`, `@example`)
+## TypeScript (両プロジェクト共通)
+- ESM modules (`"type": "module"`) — always use `.js` extensions in imports
 - Explicit return types on exported functions
-- `BigInt` for on-chain numeric values (e.g., `0n`, `BigInt(amount)`)
-- Prettier for formatting (auto-configured)
+- `BigInt` / `bigint` for on-chain numeric values (e.g. `0n`, `BigInt(amount)`)
+- JSDoc comments in Japanese for public functions
 
-## Solidity
+## Formatter
+- **hardhat-sample**: Prettier + prettier-plugin-solidity
+- **fxrp-sample**: Biome (`bunx biome format --write .` / `bun run format`)
+
+## Solidity (hardhat-sample)
 - Version: `^0.8.28`
-- Custom errors preferred over `require` strings (e.g., `error OnlyOwner()`)
+- Custom errors preferred over `require` strings
 - NatSpec comments (`@notice`, `@dev`, `@param`) in Japanese
-- Optimizer enabled: 200 runs
-- Prettier + prettier-plugin-solidity for formatting
+- Optimizer: 200 runs
 
-## Hardhat 3 Patterns
+## Hardhat 3 Patterns (hardhat-sample)
 - Tasks use `.addOption()` not `.addParam()`
 - Network access via `await hre.network.connect()`, returns `{ viem }`
 - Tasks registered in `hardhat.config.ts` via `tasks` array
-- Plugins registered via `plugins` array (not side-effect imports)
+- Plugins registered via `plugins` array
+
+## viem Patterns (fxrp-sample)
+- Chain defined with `defineChain()` in `src/client.ts`
+- Multiple return values from `read.*` come as an array: `const [a, b] = await contract.read.fn([...])`
+- FTSOv2 price: `price = rawValue / 10^feedDecimals`
+- All RPC-returned addresses validated with `isAddress()` before use
+- ABIs defined inline as `const ... = [...] as const` in `constants.ts`
 
 ## Naming
-- Task names: `contract:action` format (e.g., `counter:increment-by`)
-- Module IDs: `ModuleName#ContractName` (e.g., `CounterModule#Counter`)
-- Contract variables: camelCase; contract names: PascalCase
+- Task names: `contract:action` (e.g. `counter:increment-by`)
+- Script names: `NN-kebab-case.ts` numbered for learning order
+- Module IDs: `ModuleName#ContractName` (e.g. `CounterModule#Counter`)
