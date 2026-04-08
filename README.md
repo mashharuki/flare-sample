@@ -8,3 +8,4 @@ Flare Network検証用のリポジトリです。
 - [開発者向けドキュメント](https://dev.flare.network/)
 - [GitHub](https://github.com/flare-foundation)
 - [About FXRP](https://dev.flare.network/fxrp/overview)
+- [FlareNetwork エコシステム](https://flare.network/news/category/ecosystem)
