@@ -8,7 +8,8 @@
 		"01:get-fxrp-address": "bun run src/scripts/01-get-fxrp-address.ts",
 		"02:get-fassets-settings": "bun run src/scripts/02-get-fassets-settings.ts",
 		"03:list-agents": "bun run src/scripts/03-list-agents.ts",
-		"04:reserve-collateral": "bun run src/scripts/04-reserve-collateral.ts"
+		"04:reserve-collateral": "bun run src/scripts/04-reserve-collateral.ts",
+		"05:get-fxrp-balance": "bun run src/scripts/05-get-fxrp-balance.ts"
 	},
 	"dependencies": {
 		"dotenv": "^16.0.0",
