@@ -2,7 +2,7 @@
 
 Flare Network（Coston2テストネット）にスマートコントラクトをデプロイ・操作するためのチュートリアルプロジェクトです。
 
-**Hardhat 3** + **Viem** + **TypeScript** を使用した最新構成です。
+**Hardhat 3** + **Viem** + **TypeScript** + **bun** を使用した最新構成です。
 
 ## ネットワーク情報
 
@@ -16,7 +16,7 @@ Flare Network（Coston2テストネット）にスマートコントラクトを
 ## 前提条件
 
 - Node.js v22 以上
-- npm または pnpm
+- [bun](https://bun.sh) v1.0 以上
 
 ## セットアップ
 
@@ -24,7 +24,7 @@ Flare Network（Coston2テストネット）にスマートコントラクトを
 
 ```bash
 cd hardhat-sample
-npm install
+bun install
 ```
 
 ### 2. 環境変数の設定
@@ -48,27 +48,80 @@ https://faucet.flare.network/coston2
 
 ## コマンド一覧
 
+### ビルド・テスト
+
 ```bash
 # コントラクトのコンパイル
-npm run build
+bun run build
 
 # テスト実行（全て）
-npm test
+bun test
 
 # Solidity テストのみ
-npm run test:solidity
+bun run test:solidity
 
 # TypeScript テストのみ
-npm run test:node
+bun run test:node
 
 # ローカルノード起動
-npm run node
+bun run node
 
+# コードフォーマット
+bun run format
+
+# フォーマットチェック（CI用）
+bun run format:check
+```
+
+### デプロイ
+
+```bash
 # ローカルにデプロイ
-npm run deploy:local
+bun run deploy:local
 
 # Coston2 テストネットにデプロイ
-npm run deploy:coston2
+bun run deploy:coston2
+
+# Songbird にデプロイ
+bun run deploy:songbird
+```
+
+### コントラクト操作タスク（Counter）
+
+デプロイ後に使用できる Hardhat タスクです。コントラクトアドレスは
+`ignition/deployments/chain-{chainId}/deployed_addresses.json` から自動で読み込まれます。
+
+```bash
+# 現在のカウント値を取得
+bun run counter:get
+# → bun hardhat counter:get --network coston2
+
+# カウンターを1増やす
+bun run counter:increment
+# → bun hardhat counter:increment --network coston2
+
+# カウンターを N 増やす（--amount で指定）
+bun run counter:increment-by -- --amount 5
+# → bun hardhat counter:increment-by --amount 5 --network coston2
+
+# カウンターを1減らす
+bun run counter:decrement
+# → bun hardhat counter:decrement --network coston2
+
+# カウンターを0にリセット（オーナーのみ）
+bun run counter:reset
+# → bun hardhat counter:reset --network coston2
+
+# コントラクト情報を表示（アドレス・オーナー・カウント）
+bun run counter:info
+# → bun hardhat counter:info --network coston2
+```
+
+他のネットワークで操作する場合は `--network` を直接指定してください：
+
+```bash
+bun hardhat counter:get --network songbird
+bun hardhat counter:increment-by --amount 10 --network coston
 ```
 
 ## プロジェクト構造
@@ -79,14 +132,17 @@ hardhat-sample/
 │   ├── Counter.sol          # シンプルカウンターコントラクト
 │   ├── Counter.t.sol        # Solidityテスト（forge-std使用）
 │   └── SimpleStorage.sol    # テキスト・数値ストレージコントラクト
-├── test/
-│   ├── Counter.ts           # TypeScript テスト（Viem + node:test）
-│   └── SimpleStorage.ts     # TypeScript テスト
+├── helpers/
+│   └── getDeployedAddress.ts  # ignitionデプロイアドレス読み込みヘルパー
 ├── ignition/modules/
 │   ├── Counter.ts           # Counter デプロイモジュール
 │   └── SimpleStorage.ts     # SimpleStorage デプロイモジュール
-├── scripts/
-│   └── interact.ts          # デプロイ済みコントラクト操作スクリプト
+├── tasks/
+│   ├── counter.ts           # Counter 操作タスク
+│   └── index.ts             # タスクエクスポート
+├── test/
+│   ├── Counter.ts           # TypeScript テスト（Viem + node:test）
+│   └── SimpleStorage.ts     # TypeScript テスト
 ├── hardhat.config.ts        # Hardhat 3 設定
 ├── tsconfig.json
 ├── package.json
@@ -120,13 +176,13 @@ hardhat-sample/
 ### 1. コントラクトをビルド
 
 ```bash
-npm run build
+bun run build
 ```
 
 ### 2. Coston2 にデプロイ
 
 ```bash
-npx hardhat ignition deploy ignition/modules/Counter.ts --network coston2
+bun run deploy:coston2
 ```
 
 デプロイ成功後、コントラクトアドレスが表示されます：
@@ -135,16 +191,42 @@ npx hardhat ignition deploy ignition/modules/Counter.ts --network coston2
 CounterModule#Counter - 0x1234...abcd
 ```
 
+アドレスは `ignition/deployments/chain-114/deployed_addresses.json` に自動保存されます。
+
 ### 3. エクスプローラーで確認
 
 https://coston2-explorer.flare.network でデプロイしたコントラクトを確認できます。
 
 ### 4. コントラクトとのインタラクション
 
-`scripts/interact.ts` の `COUNTER_ADDRESS` を実際のアドレスに変更してから実行：
+デプロイ後はタスクコマンドで操作できます（アドレス指定不要）：
 
 ```bash
-npx hardhat run scripts/interact.ts --network coston2
+bun run counter:info       # コントラクト情報を確認
+bun run counter:increment  # カウントを増やす
+bun run counter:get        # 現在値を確認
+```
+
+## ヘルパー: getDeployedAddress
+
+`helpers/getDeployedAddress.ts` はデプロイアドレスを動的に読み込む汎用ヘルパーです。
+独自タスクを追加する際にも再利用できます。
+
+```typescript
+import {
+  getDeployedAddress,
+  getAllDeployedAddresses,
+  listDeployedContracts,
+} from "../helpers/getDeployedAddress.js";
+
+// 特定コントラクトのアドレスを取得
+const address = getDeployedAddress("CounterModule#Counter", 114);
+
+// チェーンの全デプロイ情報を取得
+const all = getAllDeployedAddresses(114);
+
+// デプロイ済み一覧をコンソール出力
+listDeployedContracts(114);
 ```
 
 ## Hardhat 3 の注意点（v2との違い）
@@ -156,6 +238,7 @@ npx hardhat run scripts/interact.ts --network coston2
 | ネットワーク接続 | `hre.ethers`      | `await network.connect()` |
 | ビルドコマンド   | `hardhat compile` | `hardhat build`           |
 | 初期化           | `hardhat init`    | `hardhat --init`          |
+| タスクパラメータ | `.addParam()`     | `.addOption()`            |
 
 ## 参考リンク
 

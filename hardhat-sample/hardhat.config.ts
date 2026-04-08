@@ -1,8 +1,35 @@
-import { defineConfig, configVariable } from "hardhat/config";
 import hardhatToolboxViem from "@nomicfoundation/hardhat-toolbox-viem";
+import "dotenv/config";
+import { defineConfig } from "hardhat/config";
+import {
+  counterDecrementTask,
+  counterGetTask,
+  counterIncrementByTask,
+  counterIncrementTask,
+  counterInfoTask,
+  counterResetTask,
+} from "./tasks/index.js";
 
+const { PRIVATE_KEY } = process.env;
+
+if (!PRIVATE_KEY) {
+  throw new Error("PRIVATE_KEY is not set in the environment variables.");
+}
+
+/**
+ * hardhatの設定ファイル
+ */
 export default defineConfig({
   plugins: [hardhatToolboxViem],
+
+  tasks: [
+    counterGetTask,
+    counterIncrementTask,
+    counterIncrementByTask,
+    counterDecrementTask,
+    counterResetTask,
+    counterInfoTask,
+  ],
 
   solidity: {
     version: "0.8.28",
@@ -26,7 +53,7 @@ export default defineConfig({
       type: "http",
       chainType: "generic",
       url: "https://coston2-api.flare.network/ext/C/rpc",
-      accounts: [configVariable("PRIVATE_KEY")],
+      accounts: [`${PRIVATE_KEY}`],
     },
 
     // Flare Coston テストネット（Chain ID: 16）
@@ -34,7 +61,7 @@ export default defineConfig({
       type: "http",
       chainType: "generic",
       url: "https://coston-api.flare.network/ext/C/rpc",
-      accounts: [configVariable("PRIVATE_KEY")],
+      accounts: [`${PRIVATE_KEY}`],
     },
 
     // Songbird Canary ネットワーク（Chain ID: 19）
@@ -42,7 +69,7 @@ export default defineConfig({
       type: "http",
       chainType: "generic",
       url: "https://songbird-api.flare.network/ext/C/rpc",
-      accounts: [configVariable("PRIVATE_KEY")],
+      accounts: [`${PRIVATE_KEY}`],
     },
 
     // Flare Mainnet（Chain ID: 14）
@@ -50,7 +77,7 @@ export default defineConfig({
       type: "http",
       chainType: "generic",
       url: "https://flare-api.flare.network/ext/C/rpc",
-      accounts: [configVariable("PRIVATE_KEY")],
+      accounts: [`${PRIVATE_KEY}`],
     },
   },
 
