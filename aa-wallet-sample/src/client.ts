@@ -10,7 +10,7 @@ import {
 	createPublicClient,
 	createWalletClient,
 	defineChain,
-	http
+	http,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 

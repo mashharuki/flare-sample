@@ -139,11 +139,15 @@ async function main() {
 			if (msg.includes("Account not found")) {
 				console.error("❌ XRPL アカウントが有効化されていません。");
 				console.error("");
-				console.error("  XRP テストネット フォーセットでアカウントに XRP を送金してください:");
+				console.error(
+					"  XRP テストネット フォーセットでアカウントに XRP を送金してください:",
+				);
 				console.error("  https://xrpl.org/resources/dev-tools/xrp-faucets");
 				console.error(`  アドレス: ${xrplWallet.address}`);
 				console.error("");
-				console.error("  フォーセットで XRP を受け取ったら再度このスクリプトを実行してください。");
+				console.error(
+					"  フォーセットで XRP を受け取ったら再度このスクリプトを実行してください。",
+				);
 			} else {
 				console.error("❌ トランザクション送信エラー:", msg);
 			}
