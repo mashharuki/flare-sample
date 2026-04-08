@@ -10,3 +10,4 @@ Flare Network検証用のリポジトリです。
 - [About FXRP](https://dev.flare.network/fxrp/overview)
 - [FlareNetwork エコシステム](https://flare.network/news/category/ecosystem)
 - [HyperliquidでXRP現物取引が解禁：Flare Networkの「FXRP」がもたらすDeFi革命](https://www.gfa.co.jp/crypto/news/alt-news/news-551/)
+- [One-Click DeFi Vault with Xaman, powered by Flare Smart Accounts & FAssets](https://flare.network/news/one-click-defi-vault-xaman-flare-smart-accounts)
