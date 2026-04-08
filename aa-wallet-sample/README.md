@@ -70,17 +70,165 @@ XRPL テストネット用トークンは [XRP Faucets](https://xrpl.org/resourc
 
 | スクリプト | 内容 | 必要な環境変数 |
 |---|---|---|
+| `00-generate-xrpl-wallet.ts` | XRPL ウォレットの新規生成 | 不要 |
 | `01-get-smart-account.ts` | XRPL アドレスに紐づく Flare スマートアカウントを取得 | `XRPL_SEED` |
 | `02-check-balances.ts` | FLR・FXRP・Vault 残高の確認 | `XRPL_SEED` |
 | `03-encode-instructions.ts` | 命令エンコードのデモ表示 | 不要 |
 | `04-send-fxrp-transfer.ts` | FXRP 転送命令を XRPL 経由で送信 | `XRPL_SEED`, `RECIPIENT_ADDRESS` |
 | `05-custom-instruction.ts` | カスタム命令の登録・エンコード例 | `XRPL_SEED`, `PRIVATE_KEY` |
 
+### Step 0: XRPL ウォレットを生成する
+
+```bash
+# 新しい XRPL ウォレット（シード・アドレス・公開鍵）を生成
+bun run 00:generate-xrpl-wallet
+```
+
+実行すると以下のような出力が得られます。
+
+```
+=== XRPL ウォレット生成 ===
+
+新しい XRPL ウォレットを生成しました:
+
+  シード (XRPL_SEED) : sEdS2d1YHGXk3rkJ5aLxQw9JGrgd4cq
+  アドレス           : rhFctxMbhb2zrnZAGZm4SBKfqrFi7rJoDW
+  公開鍵             : EDBD7632855FC9E94B19FDB8C4701209...
+```
+
+生成後は以下の手順で準備を進めます。
+
+1. **シードを `.env` に設定する**
+
+   ```env
+   XRPL_SEED=sEdS2d1YHGXk3rkJ5aLxQw9JGrgd4cq  # 生成された値を貼り付ける
+   ```
+
+2. **テスト用 XRP をフォーセットから取得する**
+
+   [XRP Faucets](https://xrpl.org/resources/dev-tools/xrp-faucets) を開き、生成されたアドレスを入力して XRP を受け取ります。
+
+3. **次のスクリプトへ進む**
+
+   ```bash
+   bun run 01:get-smart-account
+   ```
+
+   実行結果例
+
+   ```bash
+    === Flare Smart Accounts: スマートアカウント取得 ===
+
+    XRPL ウォレット情報:
+      アドレス : rMH93SMmbmvKrV2gGT1BNZrN587faNXi7E
+      公開鍵   : EDB680652557E56B2DA43032221F4B4DCE97F6B59057A775E0443F56A4075A6A7A
+
+    MasterAccountController アドレスを取得中...
+      アドレス : 0x434936d47503353f06750Db1A444DBDC5F0AD37c
+
+    Flare スマートアカウントアドレスを取得中...
+      Flare スマートアカウント : 0xa79385960Fa2041549B0A172FaB1c934425876AE
+
+    オペレーター XRPL アドレスを取得中...
+      オペレーター XRPL アドレス:
+      - rEyj8nsHLdgt79KJWzXR5BgF7ZbaohbXwq
+
+    === 仕組みの説明 ===
+
+    Flare Smart Accounts の流れ:
+
+    1. あなたの XRPL アドレス (rMH93SMmbmvKrV2gGT1BNZrN587faNXi7E)
+      ↓
+    2. XRPL Payment トランザクション (memo に 32 バイトの命令を埋め込む)
+      宛先: rEyj8nsHLdgt79KJWzXR5BgF7ZbaohbXwq
+      ↓
+    3. オペレーターが FDC 証明を取得して MasterAccountController を呼び出す
+      ↓
+    4. あなたの Flare スマートアカウント (0xa79385960Fa2041549B0A172FaB1c934425876AE)
+      が命令を実行する (FXRP 転送、DeFi 操作 etc.)
+
+    ポイント: FLR を持たなくても Flare チェーン上で操作できる！
+   ```
+
+> **セキュリティ注意事項**
+> - シード（秘密鍵）は絶対に他人に見せないでください
+> - `.env` ファイルは `.gitignore` に含まれているため Git にはコミットされません
+> - テストネット用に生成したシードをメインネットで使用しないでください
+
 ### まずここから（ネット接続不要）
 
 ```bash
 # 命令エンコードの仕組みをデモ表示
 bun run 03:encode-instructions
+```
+
+実行結果例
+
+```bah
+=== Flare Smart Accounts: 命令エンコードデモ ===
+
+32 バイト構造: [命令ID 1B][ウォレットID 1B][Value 10B][パラメータ 20B]
+────────────────────────────────────────────────────────────
+
+【FXRP 担保予約 (1 ロット, エージェント ID=1)】
+  エンコード結果: 0x0000000000000000000000010001000000000000000000000000000000000000
+  命令名       : FXRP 担保予約
+  命令 ID      : 0x00
+  ウォレット ID: 0
+  Value        : 1
+  パラメータ   : 0001000000000000000000000000000000000000
+
+【FXRP 転送 (10 FXRP → 0xf548...131d)】
+  エンコード結果: 0x01000000000000000000000af5488132432118596fa13800b68df4c0ff25131d
+  命令名       : FXRP 転送
+  命令 ID      : 0x01
+  ウォレット ID: 0
+  Value        : 10
+  パラメータ   : f5488132432118596fa13800b68df4c0ff25131d
+
+【FXRP リデーム (1 ロット)】
+  エンコード結果: 0x0200000000000000000000010000000000000000000000000000000000000000
+  命令名       : FXRP リデーム
+  命令 ID      : 0x02
+  ウォレット ID: 0
+  Value        : 1
+  パラメータ   : 0000000000000000000000000000000000000000
+
+【Firelight デポジット (100 FXRP, ボールト ID=1)】
+  エンコード結果: 0x1100000000000000000000640000000100000000000000000000000000000000
+  命令名       : Firelight: デポジット
+  命令 ID      : 0x11
+  ウォレット ID: 0
+  Value        : 100
+  パラメータ   : 0000000100000000000000000000000000000000
+
+【Upshift デポジット (50 FXRP, ボールト ID=2)】
+  エンコード結果: 0x2100000000000000000000320000000200000000000000000000000000000000
+  命令名       : Upshift: デポジット
+  命令 ID      : 0x21
+  ウォレット ID: 0
+  Value        : 50
+  パラメータ   : 0000000200000000000000000000000000000000
+
+
+=== 命令タイプ一覧 ===
+  0x00 : FXRP_COLLATERAL_RESERVATION
+  0x01 : FXRP_TRANSFER
+  0x02 : FXRP_REDEEM
+  0x10 : FIRELIGHT_CR_DEPOSIT
+  0x11 : FIRELIGHT_DEPOSIT
+  0x12 : FIRELIGHT_REDEEM
+  0x13 : FIRELIGHT_CLAIM_WITHDRAW
+  0x20 : UPSHIFT_CR_DEPOSIT
+  0x21 : UPSHIFT_DEPOSIT
+  0x22 : UPSHIFT_REQUEST_REDEEM
+  0x23 : UPSHIFT_CLAIM
+  0xff : CUSTOM
+
+=== エンコードデモ完了 ===
+
+これらのペイメントリファレンスを XRPL Payment トランザクションの
+Memo フィールドに埋め込むと、オペレーターが Flare 上で命令を実行します。
 ```
 
 ### スマートアカウントの確認
@@ -119,6 +267,7 @@ aa-wallet-sample/
 │   ├── helpers/
 │   │   └── paymentRef.ts       # 32 バイト命令エンコード/デコードヘルパー
 │   └── scripts/
+│       ├── 00-generate-xrpl-wallet.ts # XRPL ウォレット新規生成
 │       ├── 01-get-smart-account.ts    # XRPL → Flare アドレス取得
 │       ├── 02-check-balances.ts       # FLR/FXRP/Vault 残高確認
 │       ├── 03-encode-instructions.ts  # 命令エンコードデモ

@@ -6,6 +6,7 @@
 	"scripts": {
 		"format": "bunx biome format --write .",
 		"format:check": "bunx biome format .",
+		"00:generate-xrpl-wallet": "bun run src/scripts/00-generate-xrpl-wallet.ts",
 		"01:get-smart-account": "bun run src/scripts/01-get-smart-account.ts",
 		"02:check-balances": "bun run src/scripts/02-check-balances.ts",
 		"03:encode-instructions": "bun run src/scripts/03-encode-instructions.ts",

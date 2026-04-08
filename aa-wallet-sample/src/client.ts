@@ -10,9 +10,9 @@ import {
 	createPublicClient,
 	createWalletClient,
 	defineChain,
-	http,
-	privateKeyToAccount,
+	http
 } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 
 /** Flare Coston2 テストネット (Chain ID: 114) */
 export const coston2 = defineChain({
