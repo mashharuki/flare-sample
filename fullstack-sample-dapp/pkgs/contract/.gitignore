@@ -1,0 +1,19 @@
+node_modules/
+bun.lockb
+dist/
+artifacts/
+cache/
+typechain-types/
+ignition/deployments/
+
+# 環境変数（秘密鍵を含む可能性あり）
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# エディタ
+.vscode/
+.idea/
+*.swp
