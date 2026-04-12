@@ -10,7 +10,7 @@ Flare Network の各機能を検証・学習するためのリポジトリです
 
 最大の特徴は、FTSO・FDC といったデータプロトコルが **コアプロトコルに直接組み込まれていること（Enshrined Protocols）** です。これにより、すべてのバリデーターがデータ提供に参加し、ネットワーク全体の経済的安全性がすべてのデータフィードを支えます。サードパーティのオラクルに依存しない設計は Flare 最大の差別化ポイントです。
 
-また、EVM 互換でありながら XRP Ledger・Bitcoin・Dogecoin という**スマートコントラクト非対応チェーンとのネイティブブリッジ**を持ち、これらのユーザーが Flare DeFi に参加できる仕組みを提供します。
+また、EVM 互換でありながら XRP Ledger という**スマートコントラクト非対応チェーンとのネイティブブリッジ**を持ち、これらのユーザーが Flare DeFi に参加できる仕組みを提供します。
 
 ---
 
@@ -58,10 +58,10 @@ XRPL ユーザーが **FLR を保有せずに** Flare チェーンのスマー�
 
 ### 5. FCC — Flare Confidential Compute
 
-**Trusted Execution Environment（TEE）**を用いた安全なオフチェーン計算とクロスチェーン署名拡張。
+**Trusted Execution Environment（TEE）** を用いた安全なオフチェーン計算とクロスチェーン署名拡張。
 
 - データプロバイダーが 50% 超の署名重量で合意した命令のみ TEE マシンが実行
-- **Protocol Managed Wallets**：Flare スマートコントラクトから XRPL・Bitcoin 上のトランザクションを組み立て・署名
+- **Protocol Managed Wallets**：Flare スマートコントラクトから XRPL 上のトランザクションを組み立て・署名
 - **Flare Compute Extensions（FCE）**：開発者が独自の計算モジュールを TEE 内にデプロイし、結果をオンチェーンで検証可能に
 - 現在最終開発段階（2026 年 4 月時点では未公開）
 
