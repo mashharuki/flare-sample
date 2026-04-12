@@ -21,15 +21,14 @@
  */
 
 import "dotenv/config";
-import { Wallet } from "xrpl";
-import { encodeFunctionData } from "viem";
 import type { Address } from "viem";
+import { Wallet } from "xrpl";
 import {
 	MASTER_ACCOUNT_CONTROLLER_ABI,
 	getMasterAccountControllerAddress,
-} from "../constants.js";
-import { publicClient, createFlareWalletClient } from "../client.js";
-import { encodeCustomPaymentRef } from "../helpers/paymentRef.js";
+} from "../utils/constants.js";
+import { encodeCustomPaymentRef } from "../utils/helpers/paymentRef.js";
+import { createFlareWalletClient, publicClient } from "../viem/client.js";
 
 /**
  * カスタム命令の型定義
@@ -58,6 +57,9 @@ function buildSampleCustomCalls(recipientAddress: Address): CustomCall[] {
 	];
 }
 
+/**
+ * メイン関数
+ */
 async function main() {
 	console.log("=== Flare Smart Accounts: カスタム命令デモ ===\n");
 

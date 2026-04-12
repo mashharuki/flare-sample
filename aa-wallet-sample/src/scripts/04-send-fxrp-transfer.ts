@@ -26,17 +26,17 @@
  */
 
 import "dotenv/config";
+import type { Address } from "viem";
 import { Client, Wallet } from "xrpl";
 import {
 	getMasterAccountControllerAddress,
 	MASTER_ACCOUNT_CONTROLLER_ABI,
-} from "../constants.js";
-import { publicClient } from "../client.js";
+} from "../utils/constants.js";
 import {
-	encodeFxrpTransfer,
 	decodeInstruction,
-} from "../helpers/paymentRef.js";
-import type { Address } from "viem";
+	encodeFxrpTransfer,
+} from "../utils/helpers/paymentRef.js";
+import { publicClient } from "../viem/client.js";
 
 /** XRPL Testnet WebSocket エンドポイント */
 const XRPL_TESTNET_WSS = "wss://s.altnet.rippletest.net:51233";
@@ -44,6 +44,9 @@ const XRPL_TESTNET_WSS = "wss://s.altnet.rippletest.net:51233";
 /** XRPL 命令送信時に支払う XRP (drops 単位, 最低送金額 + α) */
 const INSTRUCTION_FEE_DROPS = "1000000"; // 1 XRP (実際はオペレーターの要求額に従う)
 
+/**
+ * メイン関数
+ */
 async function main() {
 	console.log("=== Flare Smart Accounts: FXRP 転送命令の送信 ===\n");
 
@@ -106,6 +109,7 @@ async function main() {
 		// MemoData は hex 文字列 (0x なし) で指定する
 		const memoData = paymentRef.slice(2).toUpperCase();
 
+		// ペイメント用のトランザクションデータを作成する
 		const payment = {
 			TransactionType: "Payment" as const,
 			Account: xrplWallet.address,
@@ -130,7 +134,9 @@ async function main() {
 		console.log();
 
 		let result: Awaited<ReturnType<typeof xrplClient.submitAndWait>>;
+
 		try {
+			// トランザクションの結果を取得する
 			result = await xrplClient.submitAndWait(payment, {
 				wallet: xrplWallet,
 			});

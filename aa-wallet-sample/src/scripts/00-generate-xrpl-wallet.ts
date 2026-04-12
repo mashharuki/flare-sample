@@ -16,6 +16,9 @@
 
 import { Wallet } from "xrpl";
 
+/**
+ * メイン関数
+ */
 function main() {
 	console.log("=== XRPL ウォレット生成 ===\n");
 

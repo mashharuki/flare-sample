@@ -48,12 +48,14 @@ export const publicClient = createPublicClient({
  * カスタム命令の登録など、トランザクションを送信する場合に使用する。
  */
 export function createFlareWalletClient() {
+	// 秘密鍵を読み取る
 	const privateKey = process.env.PRIVATE_KEY;
 	if (!privateKey) {
 		throw new Error(
 			"PRIVATE_KEY が .env に設定されていません。.env.example を参照してください。",
 		);
 	}
+	// Signerインスタンスに変換
 	const account = privateKeyToAccount(privateKey as `0x${string}`);
 	return {
 		client: createWalletClient({

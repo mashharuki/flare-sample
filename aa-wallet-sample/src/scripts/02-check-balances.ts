@@ -13,16 +13,18 @@
  */
 
 import "dotenv/config";
-import { Wallet } from "xrpl";
-import { formatEther, erc4626Abi } from "viem";
 import type { Address } from "viem";
+import { erc4626Abi, formatEther } from "viem";
+import { Wallet } from "xrpl";
 import {
-	MASTER_ACCOUNT_CONTROLLER_ABI,
-	ERC20_ABI,
 	getMasterAccountControllerAddress,
-} from "../constants.js";
-import { publicClient } from "../client.js";
+	MASTER_ACCOUNT_CONTROLLER_ABI
+} from "../utils/constants.js";
+import { publicClient } from "../viem/client.js";
 
+/**
+ * メイン関数
+ */
 async function main() {
 	console.log("=== Flare Smart Accounts: 残高確認 ===\n");
 

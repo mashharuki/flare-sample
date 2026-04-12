@@ -9,7 +9,7 @@
  */
 
 import type { Address } from "viem";
-import { publicClient } from "./client.js";
+import { publicClient } from "../viem/client.js";
 
 // ─── 定数 ────────────────────────────────────────────────────────────────────
 

@@ -247,3 +247,21 @@ export function decodeInstruction(paymentRef: string): DecodedInstruction {
 		rawParams,
 	};
 }
+
+
+/**
+ * 結果を整形して表示するヘルパーメソッド 
+ */
+export function printResult(label: string, encoded: string) {
+	console.log(`\n【${label}】`);
+	console.log("  エンコード結果:", encoded);
+
+	const decoded = decodeInstruction(encoded);
+	console.log("  命令名       :", decoded.instructionName);
+	console.log(
+		`  命令 ID      : 0x${decoded.instructionId.toString(16).padStart(2, "0")}`,
+	);
+	console.log("  ウォレット ID:", decoded.walletId);
+	console.log("  Value        :", decoded.value.toString());
+	console.log("  パラメータ   :", decoded.rawParams);
+}

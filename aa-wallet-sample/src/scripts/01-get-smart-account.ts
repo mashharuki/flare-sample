@@ -18,9 +18,12 @@ import { Wallet } from "xrpl";
 import {
 	MASTER_ACCOUNT_CONTROLLER_ABI,
 	getMasterAccountControllerAddress,
-} from "../constants.js";
-import { publicClient } from "../client.js";
+} from "../utils/constants.js";
+import { publicClient } from "../viem/client.js";
 
+/**
+ * メイン関数
+ */
 async function main() {
 	console.log("=== Flare Smart Accounts: スマートアカウント取得 ===\n");
 
@@ -32,6 +35,7 @@ async function main() {
 		);
 	}
 
+	// Walletインスタンスを生成
 	const xrplWallet = Wallet.fromSeed(seed);
 	console.log("XRPL ウォレット情報:");
 	console.log("  アドレス :", xrplWallet.address);
@@ -46,6 +50,7 @@ async function main() {
 
 	// ── 3. XRPL アドレスに対応する Flare スマートアカウントを取得する ──────────
 	console.log("Flare スマートアカウントアドレスを取得中...");
+	// Masterコントラクトの機能を呼び出し、Flareネットワーク上のスマートアカウントアドレスを生成
 	const personalAccount = await publicClient.readContract({
 		address: controllerAddress,
 		abi: MASTER_ACCOUNT_CONTROLLER_ABI,

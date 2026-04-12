@@ -12,29 +12,17 @@
 
 import {
 	InstructionId,
-	decodeInstruction,
+	encodeFirelightDeposit,
 	encodeFxrpCollateralReservation,
 	encodeFxrpRedeem,
 	encodeFxrpTransfer,
-	encodeFirelightDeposit,
 	encodeUpshiftDeposit,
-} from "../helpers/paymentRef.js";
+	printResult
+} from "../utils/helpers/paymentRef.js";
 
-/** 結果を整形して表示するヘルパー */
-function printResult(label: string, encoded: string) {
-	console.log(`\n【${label}】`);
-	console.log("  エンコード結果:", encoded);
-
-	const decoded = decodeInstruction(encoded);
-	console.log("  命令名       :", decoded.instructionName);
-	console.log(
-		`  命令 ID      : 0x${decoded.instructionId.toString(16).padStart(2, "0")}`,
-	);
-	console.log("  ウォレット ID:", decoded.walletId);
-	console.log("  Value        :", decoded.value.toString());
-	console.log("  パラメータ   :", decoded.rawParams);
-}
-
+/**
+ * メイン関数
+ */
 function main() {
 	console.log("=== Flare Smart Accounts: 命令エンコードデモ ===\n");
 	console.log(
