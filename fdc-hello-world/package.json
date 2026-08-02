@@ -1,0 +1,39 @@
+{
+  "name": "fdc-hello-world",
+  "version": "1.0.0",
+  "description": "Flare Data Connector (FDC) Payment attestation の最小エンドツーエンド検証プロジェクト",
+  "type": "module",
+  "scripts": {
+    "build": "hardhat build",
+    "deploy:coston2": "hardhat ignition deploy ignition/modules/FdcPaymentHelloWorld.ts --network coston2 --parameters ignition/parameters.json",
+    "fdc:00-generate-reference": "bun run src/scripts/00-generate-reference.ts",
+    "fdc:01-fund-xrpl-wallets": "bun run src/scripts/01-fund-xrpl-wallets.ts",
+    "fdc:02-send-xrpl-payment": "bun run src/scripts/02-send-xrpl-payment.ts",
+    "fdc:03-request-attestation": "bun run src/scripts/03-request-attestation.ts",
+    "fdc:04-await-and-fetch-proof": "bun run src/scripts/04-await-and-fetch-proof.ts",
+    "fdc:05-submit-proof": "bun run src/scripts/05-submit-proof.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "viem": "^2.43.0",
+    "xrpl": "^4.0.0"
+  },
+  "devDependencies": {
+    "@flarenetwork/flare-periphery-contracts": "^0.1.52",
+    "@nomicfoundation/hardhat-ignition": "^3.0.0",
+    "@nomicfoundation/hardhat-ignition-viem": "^3.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^3.0.0",
+    "@nomicfoundation/hardhat-node-test-runner": "^3.0.0",
+    "@nomicfoundation/hardhat-toolbox-viem": "^5.0.0",
+    "@nomicfoundation/hardhat-viem": "^3.0.0",
+    "@nomicfoundation/hardhat-viem-assertions": "^3.0.0",
+    "@nomicfoundation/hardhat-verify": "^3.0.0",
+    "@types/node": "^22.0.0",
+    "hardhat": "^3.0.0",
+    "prettier": "^3.0.0",
+    "prettier-plugin-solidity": "^1.4.0",
+    "typescript": "^5.0.0"
+  }
+}
