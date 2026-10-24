@@ -314,7 +314,9 @@ Full list with links: [dev.flare.network/network/developer-tools](https://dev.fl
 
 The **`@flarenetwork/flare-tx-sdk`** is the official Node.js toolkit for performing common actions on all Flare networks.
 
-**Supported operations:** claim rewards (FlareDrops, staking, FTSO delegation, rFLR), delegate to FTSO providers, stake on P-chain, vote on governance proposals, transfer native/wrapped tokens, interact with C-chain contracts.
+> **v2.0.0 (2026-10-06) breaking change:** `claimFlareDropReward` and `getClaimableFlareDropReward` were removed; `getDefaultAllocatedFeeOnP` and `getRNatProjectsAndClaimableRewards` were added. The examples below that call FlareDrop methods apply to 1.x only. The README now uses `pnpm add`.
+
+**Supported operations:** claim rewards (staking, FTSO delegation, rFLR; FlareDrops in 1.x only), delegate to FTSO providers, stake on P-chain, vote on governance proposals, transfer native/wrapped tokens, interact with C-chain contracts.
 
 ### Installation
 
@@ -358,7 +360,7 @@ await network.transferWrapped(wallet, recipient, Amount.wnats(1));
 await network.unwrapToNative(wallet, Amount.wnats(1));
 
 // Claim rewards
-await network.claimFlareDropReward(wallet);
+await network.claimFlareDropReward(wallet); // 1.x only — removed in 2.0.0
 await network.claimStakingReward(wallet);
 await network.claimFtsoReward(wallet);
 await network.claimRNatReward(wallet, [projectId1, projectId2]);
@@ -491,7 +493,7 @@ Reference: [dev.flare.network/network/governance](https://dev.flare.network/netw
 
 **Flare Confidential Compute (FCC)** extends the Flare blockchain with **Trusted Execution Environments (TEEs)** to enable secure offchain computation, cross-chain transaction signing, and fast data attestation.
 
-**Status:** FCC is in final development stages and not yet publicly available.
+**Status (as of 2026-10-24):** FCC is live on **Songbird** (since ~2026-10-01, STP.13; first use: Hex Trust USDX Proof of Reserves). A Flare mainnet deployment follows separately with no announced date. Protocol Managed Wallets are still marked "In development" on the Developer Hub.
 
 Reference: [dev.flare.network/fcc/overview](https://dev.flare.network/fcc/overview)
 
@@ -523,6 +525,21 @@ Three core components work together:
 **Flare Data Connector (FDC) via TEE:** Achieves rapid attestation by having data providers respond to attestation requests, with TEE signatures verifying consensus.
 
 **Flare Compute Extensions (FCE):** Custom computation modules that developers can deploy to run arbitrary offchain logic within TEE machines, with results verifiable onchain.
+
+## Recent Changes (2026, as of 2026-10-24)
+
+Primary source: [flare.network/news](https://flare.network/news). Items marked (unconfirmed) rest on secondary reporting.
+
+| Date | Change |
+|------|--------|
+| 2026-04-08 | **FIP.16** proposed: inflation 5% → 3% (cap 5B → 3B FLR/yr), base gas fee 60 → 1,200 gwei (20x), staged protocol-level MEV capture (builder FEL → inside FCC → merged builder/proposer), **FIRE** (Flare Income Reinvestment Entity) for FLR buybacks/burns, FDC attestation base fee 1 → 20 FLR (90% to incentive pool). Vote Apr 17–24; final result (unconfirmed). |
+| 2026-04-28 | **FAssets v1.3**: mint via a single XRPL payment to the Core Vault (destination tag / memo routing), agents only needed for redemption, hourly/daily mint caps and delayed large mints. Mainnet date reported as 2026-05-14 (unconfirmed); Songbird first. |
+| 2026-07-28 | **Smart Accounts v1.3**: one XRPL signature from XRP to yield vault (memo carries amount + vault); Monarq and Clearstar vaults; D'CENT, Xaman, Joey, Ledger Live, WalletConnect. |
+| 2026-10-01 | **FCC live on Songbird** (STP.13); Flare mainnet deployment TBD. |
+| 2026-10-06 | **Firelight** live (backed by staked FXRP). `@flarenetwork/flare-tx-sdk` **2.0.0** removes FlareDrop methods. |
+| Planned | FBTC via FCC (announced 2026-07-28, no mainnet date). FDOGE: no confirmation found. |
+
+Latest npm at time of writing: `flare-periphery-contracts` 0.1.53, `flare-wagmi-periphery-package` 3.7.0, `flare-tx-sdk` 2.0.0. With FIP.16, do not hardcode gas price or FDC fees in mainnet scripts.
 
 ## When to Use This Skill
 
