@@ -25,3 +25,8 @@ After completing any code change in `hardhat-sample/`:
    ```
 
 No linter (ESLint) is configured — formatting via Prettier is sufficient.
+
+## Other sub-projects
+- `fxrp-sample/`, `aa-wallet-sample/`: run `bun run format` (Biome); no test suite.
+- `fdc-hello-world/`: `bun run build` then `bun run format:check` (Prettier).
+- Docs: when Flare behaviour changes, update `.claude/skills/flare-*`, READMEs, and memory `flare_updates_2026`.

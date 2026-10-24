@@ -39,12 +39,40 @@ fxrp-sample/
 │       ├── 01-get-fxrp-address.ts      # Registry→AssetManagerFXRP→fAsset() + ERC20 info
 │       ├── 02-get-fassets-settings.ts  # CRF, XRP/USD price (FTSOv2), FXRP token info
 │       ├── 03-list-agents.ts           # getAvailableAgentsDetailedList() paged
-│       └── 04-reserve-collateral.ts   # reserveCollateral() with DRY_RUN guard
+│       ├── 04-reserve-collateral.ts   # reserveCollateral() with DRY_RUN guard (legacy flow since FAssets v1.3)
+│       └── 05-get-fxrp-balance.ts
 ├── .env.example
 ├── package.json             # Biome formatter, viem, dotenv, @types/node, typescript
 ├── tsconfig.json
 └── .gitignore               # excludes .env, node_modules, dist
 ```
+
+## aa-wallet-sample/
+
+```
+aa-wallet-sample/
+├── src/
+│   ├── viem/client.ts   # public/wallet client (Coston2)
+│   ├── utils/constants.ts  # ABIs, addresses, getMasterAccountControllerAddress()
+│   ├── utils/helpers/   # payment reference (32-byte) encode/decode etc.
+│   └── scripts/         # 00-generate-xrpl-wallet .. 05-custom-instruction
+└── biome.json
+```
+Flow: XRPL Payment with memo instruction -> operator gets FDC proof -> MasterAccountController executes on Flare. v1.3 adds one-signature mint+deposit.
+
+## fdc-hello-world/
+
+```
+fdc-hello-world/
+├── contracts/FdcPaymentHelloWorld.sol   # registerPayment(): verifyPayment + reference check
+├── ignition/modules/FdcPaymentHelloWorld.ts
+├── src/{constants,fdcEncoding,paymentReference,state}.ts, src/viem/
+└── src/scripts/00-generate-reference .. 05-submit-proof
+```
+Pipeline: XRPL payment (memo=reference) -> Verifier prepareRequest -> FdcHub.requestAttestation -> wait Relay.isFinalized -> DA Layer proof -> registerPayment. Origin: ReserveFlow Credit hackathon idea risk check.
+
+## fullstack-sample-dapp/
+pnpm workspace: `pkgs/contract` (Hardhat) and `pkgs/frontend` (React + Vite, eslint). Run via `pnpm contract ...` / `pnpm frontend ...`.
 
 ## Key Design Patterns (fxrp-sample)
 

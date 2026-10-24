@@ -67,3 +67,38 @@ DRY_RUN=false bun run 04:reserve-collateral  # actually broadcast
 ```bash
 bunx biome format --write .   # or: bun run format
 ```
+
+---
+
+## aa-wallet-sample/ (cd aa-wallet-sample)
+```bash
+bun install && cp .env.example .env   # XRPL_SEED required; PRIVATE_KEY only for 05
+bun run 00:generate-xrpl-wallet
+bun run 01:get-smart-account
+bun run 02:check-balances
+bun run 03:encode-instructions        # no network
+bun run 04:send-fxrp-transfer
+bun run 05:custom-instruction
+bun run format                        # Biome
+```
+
+## fdc-hello-world/ (cd fdc-hello-world)
+```bash
+bun install
+bun run build
+bun run deploy:coston2
+bun run fdc:00-generate-reference
+bun run fdc:01-fund-xrpl-wallets
+bun run fdc:02-send-xrpl-payment
+bun run fdc:03-request-attestation
+bun run fdc:04-await-and-fetch-proof
+bun run fdc:05-submit-proof
+bun run format                        # Prettier
+```
+
+## fullstack-sample-dapp/ (pnpm)
+```bash
+pnpm install
+pnpm contract <script>
+pnpm frontend <script>
+```
