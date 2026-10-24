@@ -348,6 +348,8 @@ XRPL Payment トランザクションの Memo フィールドに埋め込む命�
 
 スマートアカウントの中核コントラクトです。全 Flare ネットワークで同じアドレス (`0x434936d47503353f06750Db1A444DBDC5F0AD37c`) を持ちます。
 
+> **注意**: アドレスは v1.3（2026 年 7 月）で変わっていないか未確認です。ハードコードせず、`getMasterAccountControllerAddress()` でレジストリから取得してください。
+
 ```typescript
 // XRPL アドレスから Flare スマートアカウントアドレスを取得
 const smartAccount = await publicClient.readContract({

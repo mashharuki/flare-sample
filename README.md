@@ -55,6 +55,7 @@ XRPL ユーザーが **FLR を保有せずに** Flare チェーンのスマー�
 - ユーザーは XRPL Payment のメモフィールドに 32 バイトの命令（Payment Reference）を書くだけ
 - オペレーターが FDC で支払い証明を取得し、`MasterAccountController` を呼び出してガスを立替実行
 - FXRP のミント・転送・Firelight/Upshift Vault への預け入れなどをワントランザクションで完結
+- v1.3（2026 年 7 月）以降は、メモにミント額と対象 Vault を載せることで、XRP から Vault への預け入れが **XRPL 署名 1 回**で完結
 
 ### 5. FCC — Flare Confidential Compute
 
@@ -63,7 +64,7 @@ XRPL ユーザーが **FLR を保有せずに** Flare チェーンのスマー�
 - データプロバイダーが 50% 超の署名重量で合意した命令のみ TEE マシンが実行
 - **Protocol Managed Wallets**：Flare スマートコントラクトから XRPL 上のトランザクションを組み立て・署名
 - **Flare Compute Extensions（FCE）**：開発者が独自の計算モジュールを TEE 内にデプロイし、結果をオンチェーンで検証可能に
-- 現在最終開発段階（2026 年 4 月時点では未公開）
+- 2026 年 10 月 1 日から **Songbird で稼働中**（STP.13 可決、最初のユースケースは Hex Trust USDX の準備金証明）。Flare メインネット版は別途予定で、日程は未定
 
 ---
 
@@ -152,6 +153,8 @@ XRPL ユーザー
 ```
 
 ### FAssets（FXRP）のフロー
+
+FAssets v1.3（2026 年 4 月）以降の標準ミントは、XRPL 上で Core Vault へ **1 回送金**し、Executor が FDC 証明を Flare へ中継する方式です（エージェント選択は不要。エージェントは償還で引き続き必要）。以下は従来の担保予約フロー（legacy）で、`fxrp-sample/` はこちらを題材にしています。
 
 ```
 1. ユーザーが Flare 上でエージェントに担保を予約（reserveCollateral）

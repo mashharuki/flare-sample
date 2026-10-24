@@ -15,6 +15,8 @@ FXRP は Flare の **FAssets** システムが生み出す ERC-20 トークン�
 
 ## ミントフロー
 
+> **注意（FAssets v1.3 以降）**: 標準のミント方式は、XRPL から Core Vault への 1 回の送金（Executor が FDC 証明を中継）に変わりました。以下は従来の担保予約フロー（legacy）で、このサンプルのスクリプトはその仕組みを学ぶためのものです。償還ではエージェントが引き続き必要です。最新の仕様は [Flare Developer Hub](https://dev.flare.network/fassets/overview) を参照してください。
+
 ```
 Step 1: reserveCollateral()     (Flare トランザクション)
    ↓
